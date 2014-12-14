@@ -2,6 +2,9 @@
 
 import os, sys
 
+so = os.path.join(os.path.dirname(__file__), "cpp", "libstopwords.so")
+stopwords = os.path.join(os.path.dirname(__file__), "outfile.txt").encode("utf-8")
+
 from cffi import FFI
 
 ffi = FFI()
@@ -14,9 +17,9 @@ void deinit(void* ctx);
 const char* guess_language(void* ctx, const char* text, const char* delim);
 """)
 
-sw = ffi.dlopen("/home/jb/programs/coursera/wsdm/hw4/cpp/libstopwords.so")
+sw = ffi.dlopen(so)
 
-path = ffi.new("char[]", b"/home/jb/programs/coursera/wsdm/hw4/outfile.txt")
+path = ffi.new("char[]", stopwords)
 ctx = ffi.new("void **")
 if sw.init(path, ctx) != 0:
     raise ValueError()
